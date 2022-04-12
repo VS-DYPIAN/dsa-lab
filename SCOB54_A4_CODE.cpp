@@ -137,7 +137,7 @@ int dict :: update(node * root,char word[20])  // 5.updating value need to imple
  {
   if(strcmp (word,root->word) == 0)
   {
-   cout<<"\nEnter New Meaning of Keyword : "<<root->word;
+   cout<<"\nEnter New Meaning of Keyword : "<<root->word<< "=";
    cin>>root->meaning;
    return 1;
   }
