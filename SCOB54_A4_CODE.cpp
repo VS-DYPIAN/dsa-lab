@@ -5,6 +5,13 @@ sorted in ascending/ Descending order. Also find how many maximum comparisons ma
 require for finding any keyword. Use Binary Search Tree for implementation.
 **********************************************************************************/
 
+/***************--SCOB54 VAIBHAV SAWANT ASSIGNMENT 4 CODE--**********************
+A Dictionary stores keywords & its meanings. Provide facility for adding new keywords, 
+deleting keywords, updating values of any entry. Provide facility to display whole data 
+sorted in ascending/ Descending order. Also find how many maximum comparisons may 
+require for finding any keyword. Use Binary Search Tree for implementation.
+**********************************************************************************/
+
 #include <iostream>
 #include<string.h>
 using namespace std;
@@ -28,34 +35,18 @@ public:        // function declaration
  int search(node *,char []);                // search the data
  int update(node *,char []);                // updating existing data
  void inorder_rec(node *rnode);             // to dispaly in increasing order
- void postorder_rec(node *rnode);           // to dispaly in decreasing order
+ void Descending_rec(node *rnode);           // to dispaly in decreasing order
  void inorder()
  {
   inorder_rec(root);
  }
- void postorder()
+ void Descending()
  {
- postorder_rec(root);
+ Descending_rec(root);
 }
  node* del(node *,char []);                 // deletion of data
  node * min(node *);                        // to find minimum
 };
-
-node* Swapnodes(node *root)                 // Swapping is used for descending order
-{
-    node* temp;
-    if (root == NULL)
-       return 0;
-       
-    temp = root->left;
-        root->left = root->right;
-        root->right = temp;
-
-        Swapnodes(root->left);
-        Swapnodes(root->right);
-    return 0;
-    
-}
 
 
 void dict :: create()             // 1.Create function
@@ -225,7 +216,15 @@ void dict :: inorder_rec(node *rnode)    // for ascending order
   inorder_rec(rnode->right);
  }
 }
-
+void dict :: Descending_rec(node *rnode)    // for ascending order
+{
+ if(rnode)
+ {
+  Descending_rec(rnode->right);
+  cout<<" "<<rnode->word<<" : "<<rnode->meaning<<endl;
+  Descending_rec(rnode->left);
+ }
+}
 
 
 int main()
@@ -340,12 +339,11 @@ int main()
     }
     else
     {
-		Swapnodes(d.root);
-        cout<<"\ndescending order is:\n";
-        d.inorder();
-        Swapnodes(d.root);
+     cout<<"\nDescending order is:\n"; 
+     d.Descending();
+     
     }
-	break;
+    break;
     case 8:
             exit(1);
     default:
