@@ -1,125 +1,184 @@
+/*Consider telephone book database of N clients. Make use of a hash table implementation
+to quickly look up client‘s telephone number. Make use of two collision handling
+techniques and compare them using number of comparisons required to find a set of
+telephone numbers*/
 #include<iostream>
-#include<cstring>
-
-//int mod = 1e9+7;
-
+#include<string>
 using namespace std;
-
-class Telephone{
-	unsigned long long key;
-	int address;
-	int num;
-	unsigned long long mobile[10];
+class Telephone
+{
+	int key,address;
+	int mobile[12];
 	string name[10];
-	
-public:
-	Telephone(){
-		for(int i=0;i<10;i++){
-			mobile[i] = 0;
-		}
-		
-		for(int i=0;i<10;i++){
-			name[i] = "-";
-		}
-		
-	}
+	public:
+	Telephone()
 
-	void insert_record(){
-		
-		cout<<"Enter no of records you want to enter :- ";
-		cin>>num;
-		cout<<endl;
-		
-		while(num--){
-			cout<<"Enter Telephone no :- ";
-			cin>>key;
-			cout<<endl;
-			
-			address = hash_function(key);
-			
-			if(mobile[address] == 0){
-				mobile[address] = key;
-				cout<<"Enter name of the person :- ";
-				cin>>name[address];
-				cout<<endl;
+	{
+		for(int i=0;i<10;i++)
+		{
+			mobile[i]=(-1);
+		}
+	}
+	
+	void insert_linearprob()
+	{
+		cout<<"Enter the mobile no : ";
+		cin>>key;
+		address=key%10;                  //hash function 
+		if(mobile[address]==(-1))
+		{
+			mobile[address]=key;
+			cout<<"Enter the name :";
+			cin>>name[address];
+		}
+		else
+		{
+			int i=address+1;
+			while(address!=i)
+			{
+				if(mobile[i]==(-1))
+				{
+					mobile[i]=key;
+					cout<<"Enter the name :";
+					cin>>name[i];
+					break;
+				}
+				else
+				{
+					i=i%10+1;
+				}
 			}
-			else{
-				hash_collision_quadratic_probing(mobile, name, key);
-			}
+		}
+	}
+	void insert_Quadraticprob()
+	{
+		cout<<"Enter the mobile no : ";
+		cin>>key;
+		address=key%10;                  //hash function 
+		if(mobile[address]==(-1))
+		{
+			mobile[address]=key;
+			cout<<"Enter the name :";
+			cin>>name[address];
+		}
+		else
+		{
+		   while(1)
+		    {
+			int k = 0;
+			int V = (address + k*k)%10;
 			
+			
+				if(mobile[V]==(-1))
+				{
+					mobile[V]=key;
+					cout<<"Enter the name :";
+					cin>>name[V];
+					break;
+				}
+				else
+				{
+					k++;
+				}
+		   }
 		}
 	}
-	
-	void hash_collision_linear_probing(unsigned long long mobile[] ,string name[], unsigned long long key){
-		int adr = hash_function(key);
-		
-		while(mobile[(adr%10)]!= 0){
-			adr++;
-		}
-		
-		mobile[adr%10] = key;
-		cout<<"Enter name of the person :- ";
-		cin>>name[adr%10];
-		cout<<endl;
-	}
-	
-		void hash_collision_quadratic_probing(unsigned long long mobile[] ,string name[], unsigned long long key){
-		int adr = hash_function(key);
-		int i=1;
-		while(mobile[(adr%10)]!= 0){
-			adr+= (i*i);
-			i++;
-		}
-		
-		mobile[adr%10] = key;
-		cout<<"Enter name of the person :- ";
-		cin>>name[adr%10];
-		cout<<endl;
-	}
-	
-	void display(){
-		cout<<"Index\tName\tMobile"<<endl;
-		for(int i=0;i<10;i++){
-			cout<<i<<"\t"<<name[i]<<"\t"<<mobile[i]<<endl;
-		}
-	}
-		
-	int hash_function(unsigned long long key){
-		return key%10;
-	}
-
-};
-
-int main(){
-	
-	Telephone t1;
-		
-		
-	
-	int choice;
-	char ch;
-	
-	do{
-	    cout<<"****Telephone Directory****"<<endl;
-	    cout<<"1. Insert record in Directory"<<endl;
-	    cout<<"2. Display Telephone Directory"<<endl;
-	    cout<<"3. Exit"<<endl;
+	void display()
+	{   
 	    
-	    cout<<endl<<"Enter your choice :- ";
-	    cin>>choice;
-	    cout<<endl;
-	    
-	    switch(choice){
-	        case 1: 
-                	t1.insert_record();
-                	break;
-            case 2:
-	                t1.display();
-	                break;
+	  cout<<"\nindex \t\t Mobile\t\t Name"<<endl;
+	    for(int i=0;i<10;i++)
+	    {
+	        if(mobile[i]!=(-1))
+	        {
+	        cout<<"index:"<<i<<"\t\t"<<mobile[i]<<"\t"<<name[i]<<endl;
+	        }
+	        else{
+	            cout<<"index:"<<i <<"\t"<<-1<<endl;
+	        }
 	    }
-	}while(choice<3);
-	
-	cout<<"Thanks for Using My software"<<endl;
-
-return 0;
+	}
+	int Search(long k)
+    {
+            int i;
+            for(i=0;i<10;i++)
+             {
+                 if(mobile[i]==k)
+                 {
+                  cout<<mobile[i]<<" is Found at "<<  i  <<" Location With Name "<<name[i]<<endl;
+                 return i;
+                 }
+                 
+             }
+            if(mobile[i]!=k)
+                 {
+                  cout<<"Record not found"<<endl;
+                 }
+            if(i==10)
+             {
+             return -1;
+             }
+    return 0;
+    }
+};
+           
+int main(){
+    int m=1;
+    Telephone t;
+    int x;
+   
+ while(1)   
+  {
+    cout << "******************************"<< endl;
+    cout << "Opeartion on hashtable "<< endl;
+    cout << "******************************"<< endl;
+    cout << "1. Insert record using linear probing"     << endl;
+    cout << "2. Insert record using quadratic  probing "<< endl;
+    cout << "3.Display client's database "<< endl;
+    cout << "4.Search record  "<< endl;
+    cout << "5.Exit "<< endl;
+    cout << "Enter your choice : ";
+    cin>>x;
+    
+    
+        switch(x)
+        {
+          long k;
+	      case 1:
+	        int n;
+	        cout<<"How many record want to insert : ";
+	        cin>>n;
+	        for(int i=0;i<n;i++)
+	        {
+	        t.insert_linearprob();	
+	        }
+	    
+	        break;
+		       
+	      case 2:
+	        cout<<"How many record want to insert : ";
+	        cin>>n;
+	        for(int i=0;i<n;i++)
+	        {
+	        t.insert_Quadraticprob();
+	        }
+	        break;
+	      
+	      case 3:
+	        t.display();
+	        break;
+	      
+	      case 4:
+	        cout<<"Search:";
+            cin>>k;
+	        t.Search(k);
+	        break;
+	      
+	      case 5:
+	        exit(1);
+	      default:
+	        cout<<"wrong choice"<<endl;
+       }
+    }    
+   
 }
