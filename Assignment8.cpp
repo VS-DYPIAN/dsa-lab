@@ -3,155 +3,190 @@
 #define max 10
 using namespace std;
 
-struct dic
+struct Dict
 {
-	char cWord[20];
-	char cMeaning[20];
+  public:
+	char word[20];
+	char meaning[20];
+	int chain;
 
-};//end of structure 	
+}; 	
 
-class hashtable
+class Hashfunction
 {
 	public:
-		dic ht[max];
-		hashtable()	//constructor
+		Dict ht[max];               //ht is array of type class dict
+		char w[30],m[30];
+		Hashfunction()	
 		{
 			for(int i=0;i<max;i++)
 			{
-				strcpy(ht[i].cWord,"");
-				strcpy(ht[i].cMeaning,"");
+				strcpy(ht[i].word,"-1");
+				strcpy(ht[i].meaning,"-1");
+				ht[max].chain= -1;
 			}
 		}
 		
 		int hash(char ckey[10])
 		{
-			int i,s=0;
-			for(i=0;ckey[i]!='\0';i++)
+			int i,s=0,c=0,x=0;    // string to ascii conversion
+			for(i=0;ckey[i]!='\0';i++)   // "/0" is used to check end of string
 			{
 				s=s+ckey[i];
 			}
+            x= s%max;
+            c=x;
+			return(c);
+			while(1)
+           {
 
-			return(s%max);
+                        if(strcmp(ht[x].word,"-1")==0)
+                    {
+                        strcpy(ht[x].word,w);
+                        strcpy(ht[x].meaning,m);
+                        if(c!=x)
+                        {
+                            ht[c].chain=x;
+                        }
+                        break;
+                    }
+                    else
+                         x=(x+1)%10;
+
+                        if(c==x)
+                        {  cout<<"\n hash table is full";
+                            break;
+                        }
+            }
+			
+		}
 		
-		}//end of hash
-		
-		void insert_word(dic d);
+		void insert(Dict d);
 		void display();
-		int search_word(char cW[]);
-		void del_word(char cW[]);
+		int search(char cW[]);
+		void delword(char cW[]);
 		
-};//end of class
+};
 
-void hashtable::insert_word(dic d)
+void Hashfunction::insert(Dict d)
 {
 	int iIndex=10;
 	for(int i=0;i%max!=iIndex;i=(i+1)%max)
 	{
-		iIndex=(hash(d.cWord)+i*i)%max;
-		cout<<"\n\n Position :"<<i<<" "<<iIndex;
+		iIndex=(hash(d.word)+i*i)%max;
+		//cout<<"\n\n Position :"<<" "<<i<<" " << "-1"<<" "<<iIndex<<endl;
 		if(i>0)
-		cout<<"\n Collision at "<<iIndex; 
-		if(strcmp(ht[iIndex].cWord,"")==0)
+		
+		//cout<<"\n Collision is at "<<iIndex<<endl; 
+		
+		if(strcmp(ht[iIndex].word,"-1")==0)
 		{
 			ht[iIndex]=d;
 			break;
 		}
 	}	
 		
-}//end  of insert
+}
 
-void hashtable::display()
+void Hashfunction::display()
 {
-	cout<<"index\t\tWord\t\tmeaning";
+	cout<<"index\t\tWord\t\tmeaning\t\tchain";
 	for(int i=0;i<max;i++)
 	{
-		cout<<"\n"<<i<<"\t\t"<<ht[i].cWord<<"\t\t"<<ht[i].cMeaning<<"\n";
+		cout<<"\n"<<i<<"\t\t"<<ht[i].word<<"\t\t"<<ht[i].meaning<<"\t\t"<<ht[max].chain<<"\n";
 	}
 
-}//end of display
+}
 
-int hashtable::search_word(char cW[10])
+int Hashfunction::search(char cW[10])
 {
 	int iIndex,iFlag=0;
 	for(int i=0;i%max!=iIndex;i=(i+1)%max)
 	{
 		iIndex=(hash(cW)+i*i)%max;
-		if(strcmp(ht[iIndex].cWord,cW)==0)
+		if(strcmp(ht[iIndex].word,cW)==0)
 		{
-			cout<<"\nWord Found and Meaning is :"<<ht[iIndex].cMeaning;
+			cout<<"Word Found and Meaning is :"<<ht[iIndex].meaning<<endl;
 			iFlag=1;
 			break;
 		}
 	}
 	if(iFlag==0)
-	cout<<"\nWord Not Found";
-	
-}//end of search_word
+	cout<<"Word Not Found"<<endl;
+	return 0;
+}
 
-void hashtable::del_word(char cW[10])
+void Hashfunction::delword(char cW[10])
 {
 	int iIndex,iFlag=0;
 	for(int i=0;i%max!=iIndex;i=(i+1)%max)
 	{
 		iIndex=(hash(cW)+i*i)%max;
-		if(strcmp(ht[iIndex].cWord,cW)==0)
+		if(strcmp(ht[iIndex].word,cW)==0)
 		{
-			cout<<"\nWord Found and deleted :"<<ht[iIndex].cMeaning;
-			strcpy(ht[iIndex].cWord,"");
-			strcpy(ht[iIndex].cMeaning,"");
+			cout<<"\nWord Found and delword :"<<ht[iIndex].meaning<<endl;
+			strcpy(ht[iIndex].word,"-1");
+			strcpy(ht[iIndex].meaning,"-1");
 			iFlag=1;
 			break;
 		}
 	}
 	if(iFlag==0)
-	cout<<"\n Word Not Found";
+	cout<<"Word Not Found"<<endl;
 	
-}//end of del_word
+}
 	
 int main()
 {
 	char cW[10];
-	int iCh,iFlag=0;
-	hashtable h;
-	dic d;
-	do
+	int x,iFlag=0;
+	Hashfunction h;
+	Dict d;
+	while(1)
 	{
-		cout<<"\n---------------LIST--------------\n";
-		cout<<"1.INSERT WORD\n2.DISPLAY\n3.SEARCH MEANING\n4.DELETE\n5.EXIT\n";
-		cout<<"Enter your choice:";
-		cin>>iCh;
-		cout<<"\n";
-		
-		switch(iCh)
+	      cout<<"**********"<<endl;
+	      cout<<"Operations on dictionary using hashtable"<<endl;
+	      cout<<"**********"<<endl;
+	      cout<<"1.Insert "<<endl;
+	      cout<<"2.Display Dictionary" <<endl;
+	      cout<<"3.Search " <<endl;
+	      cout<<"4.Delete" <<endl;
+	      cout<<"5.Exit" <<endl;
+	      cout<<"Enter your choice :-";
+	      cin>>x;
+                switch(x)
 		{
-			case 1://insert
-				cout<<"\n Enter word to insert:";
-				cin>>d.cWord;
-				cout<<"\n Enter Meaning:";
-				cin>>d.cMeaning;
-				h.insert_word(d);
+			case 1:
+				cout<<"Enter word:";
+				cin>>d.word;
+				cout<<"Enter Meaning:";
+				cin>>d.meaning;
+				h.insert(d);
 				break;
-				
-			case 2://display
+			
+			case 2:
 				h.display();
 				break;
 				
-			case 3://search
+			case 3:
 				cout<<"\n Enter word to be searched:";
 				cin>>cW;
-				h.search_word(cW);
+				h.search(cW);
 				break;
 				
-			case 4://delete
+			case 4:
 				cout<<"\n Enter the word to be deleted:";
 				cin>>cW;
-				h.del_word(cW);
+				h.delword(cW);
 				break;
 				
-			case 5://exit
-				break;
+			case 5:
+				exit(1);
+			
+			default:
+                cout<<"Wrong choice"<<endl;
 				
-		}//end of switch
-	}while(iCh!=5);			
-return 0;
+		}
+	}			
+
 }
