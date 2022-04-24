@@ -1,204 +1,197 @@
-/*Implement all the functions of a dictionary (ADT) using hashing. Data: Set of (key, value) pairs, Keys are 
-mapped to values, Keys must be comparable, Keys must be unique Standard Operations: Insert(key, value), 
-Find(key), Delete(key)*/
+/*mplement all the functions of a dictionary (ADT) using hashing and handle collisions 
+using chaining with / without replacement. 
+Data: Set of (key, value) pairs, Keys are mapped to values, Keys must be comparable, 
+Keys must be unique. Standard Operations: Insert(key, value), Find(key), Delete(key)*/
 
 #include<iostream>
-#include<string.h>
-
+#include<cstring>
+#define max 10
 using namespace std;
 
-class HashFunction
-  {
-     typedef struct hash
- {
-  long key;
-  char name[10];
- }hash;
- hash h[10];
-   public:
- HashFunction();
- void insert();
- void display();
- int find(long);
- void Delete(long);
+struct Dict
+{
+  public:
+	char word[20];
+	char meaning[20];
+	int chain;
 
+}; 	
 
-  };
+class Hashfunction
+{
+	public:
+		Dict ht[max];               //ht is array of type class dict
+		char w[30],m[30];
+		Hashfunction()	
+		{
+			for(int i=0;i<max;i++)
+			{
+				strcpy(ht[i].word,"-1");
+				strcpy(ht[i].meaning,"-1");
+				ht[max].chain= -1;
+			}
+		}
+		
+		int hash(char ckey[10])
+		{
+			int i,s=0,c=0,x=0;    // string to ascii conversion
+			for(i=0;ckey[i]!='\0';i++)   // "/0" is used to check end of string
+			{
+				s=s+ckey[i];
+			}
+            x= s%max;
+            c=x;
+			return(c);
+			while(1)
+           {
 
-HashFunction::HashFunction()
-  {
- int i;
- for(i=0;i<10;i++)
-   {
-  h[i].key=-1;
-  strcpy(h[i].name,"NULL");
-   }
-  }
-void HashFunction::Delete(long k)
-  {
- int index=find(k);
- if(index==-1)
-   {
-  cout<<"\n\tKey Not Found";
-   }
- else
-   {
-  h[index].key=-1;
-  strcpy(h[index].name,"NULL");
-  cout<<"\n\tKey is Deleted";
-   }
+                        if(strcmp(ht[x].word,"-1")==0)
+                    {
+                        strcpy(ht[x].word,w);
+                        strcpy(ht[x].meaning,m);
+                        if(c!=x)
+                        {
+                            ht[c].chain=x;
+                        }
+                        break;
+                    }
+                    else
+                         x=(x+1)%10;
 
-
-  }
-int HashFunction::find(long k)
-  {
- int i;
- for(i=0;i<10;i++)
-   {
-  if(h[i].key==k)
-    {
-   cout<<"\n\t"<<h[i].key<<" is Found at "<<i<<" Location With Name "<<h[i].name;
-   return i;
-    }
-   }
- if(i==10)
-      {
-  return -1;
-   }
-
-  }
-
-
-void HashFunction::display()
-  {
- int i;
- cout<<"\n\t\tKey\t\tName";
- for(i=0;i<10;i++)
-    {
-  cout<<"\n\th["<<i<<"]\t"<<h[i].key<<"\t\t"<<h[i].name;
-   }
-  }
-
-void HashFunction::insert()
-  {
- char ans,n[10],ntemp[10];
- long k,temp;
- int v,hi,cnt=0,flag=0,i;
-
- do
-   {
-  if(cnt>=10)
-    {
-   cout<<"\n\tHash Table is FULL";
-   break;
-    }
-  cout<<"\n\tEnter a Telephone No: ";
-  cin>>k;
-  cout<<"\n\tEnter a Client Name: ";
-  cin>>n;
-  hi=k%10;// hash function
-  if(h[hi].key==-1)
-    {
-   h[hi].key=k;
-   strcpy(h[hi].name,n);
-    }
-      else
-     {
-
-   if(h[hi].key%10!=hi)
-     {
-    temp=h[hi].key;
-    strcpy(ntemp,h[hi].name);
-    h[hi].key=k;
-    strcpy(h[hi].name,n);
-    for(i=hi+1;i<10;i++)
-        {
-     if(h[i].key==-1)
-         {
-      h[i].key=temp;
-      strcpy(h[i].name,ntemp);
-      flag=1;
-      break;
-          }
-        }
-    for(i=0;i<hi && flag==0;i++)
-        {
-     if(h[i].key==-1)
-         {
-      h[i].key=temp;
-      strcpy(h[i].name,ntemp);
-      break;
-          }
+                        if(c==x)
+                        {  cout<<"\n hash table is full";
+                            break;
+                        }
             }
-       }
-   else
-     {
-    for(i=hi+1;i<10;i++)
-        {
-     if(h[i].key==-1)
-         {
-      h[i].key=k;
-      strcpy(h[i].name,n);
-      flag=1;
-      break;
-          }
-        }
-    for(i=0;i<hi && flag==0;i++)
-        {
-     if(h[i].key==-1)
-         {
-      h[i].key=k;
-      strcpy(h[i].name,n);
-      break;
-          }
-          }
-     }
+			
+		}
+		
+		void insert(Dict d);
+		void display();
+		int search(char cW[]);
+		void delword(char cW[]);
+		
+};
 
-    }
-      flag=0;
-      cnt++;
-      cout<<"\n\t..... Do You Want to Insert More Key: y/n";
-      cin>>ans;
-   }while(ans=='y'||ans=='Y');
+void Hashfunction::insert(Dict d)
+{
+	int iIndex=10;
+	for(int i=0;i%max!=iIndex;i=(i+1)%max)
+	{
+		iIndex=(hash(d.word)+i*i)%max;
+		//cout<<"\n\n Position :"<<" "<<i<<" " << "-1"<<" "<<iIndex<<endl;
+		if(i>0)
+		
+		//cout<<"\n Collision is at "<<iIndex<<endl; 
+		
+		if(strcmp(ht[iIndex].word,"-1")==0)
+		{
+			ht[iIndex]=d;
+			break;
+		}
+	}	
+		
+}
 
-  }
+void Hashfunction::display()
+{
+	cout<<"index\t\tWord\t\tmeaning\t\tchain";
+	for(int i=0;i<max;i++)
+	{
+		cout<<"\n"<<i<<"\t\t"<<ht[i].word<<"\t\t"<<ht[i].meaning<<"\t\t"<<ht[max].chain<<"\n";
+	}
 
+}
 
+int Hashfunction::search(char cW[10])
+{
+	int iIndex,iFlag=0;
+	for(int i=0;i%max!=iIndex;i=(i+1)%max)
+	{
+		iIndex=(hash(cW)+i*i)%max;
+		if(strcmp(ht[iIndex].word,cW)==0)
+		{
+			cout<<"Word Found and Meaning is :"<<ht[iIndex].meaning<<endl;
+			iFlag=1;
+			break;
+		}
+	}
+	if(iFlag==0)
+	cout<<"Word Not Found"<<endl;
+	return 0;
+}
 
+void Hashfunction::delword(char cW[10])
+{
+	int iIndex,iFlag=0;
+	for(int i=0;i%max!=iIndex;i=(i+1)%max)
+	{
+		iIndex=(hash(cW)+i*i)%max;
+		if(strcmp(ht[iIndex].word,cW)==0)
+		{
+			cout<<"\nWord Found and delword :"<<ht[iIndex].meaning<<endl;
+			strcpy(ht[iIndex].word,"-1");
+			strcpy(ht[iIndex].meaning,"-1");
+			iFlag=1;
+			break;
+		}
+	}
+	if(iFlag==0)
+	cout<<"Word Not Found"<<endl;
+	
+}
+	
 int main()
-  {
- long k;
- int ch,index;
- char ans;
- HashFunction obj;
- do
-   {
-  cout<<"\n\t***** Telephone (ADT) *****";
-  cout<<"\n\t1. Insert\n\t2. Display\n\t3. Find\n\t4. Delete\n\t5. Exit";
-  cout<<"\n\t..... Enter Your Choice: ";
-  cin>>ch;
-  switch(ch)
-    {
-   case 1:  obj.insert();
-     break;
-   case 2: obj.display();
-     break;
-   case 3: cout<<"\n\tEnter a Key Which You Want to Search: ";
-     cin>>k;
-     index=obj.find(k);
-     if(index==-1)
-       {
-      cout<<"\n\tKey Not Found";
-       }
-     break;
-   case 4: cout<<"\n\tEnter a Key Which You Want to Delete: ";
-     cin>>k;
-     obj.Delete(k);
-     break;
-   case 5:
-     break;
-    }
-  cout<<"\n\t..... Do You Want to Continue in Main Menu:y/n ";
-  cin>>ans;
-   }while(ans=='y'||ans=='Y');
-  }
+{
+	char cW[10];
+	int x,iFlag=0;
+	Hashfunction h;
+	Dict d;
+	while(1)
+	{
+	      cout<<"**********"<<endl;
+	      cout<<"Operations on dictionary using hashtable"<<endl;
+	      cout<<"**********"<<endl;
+	      cout<<"1.Insert "<<endl;
+	      cout<<"2.Display Dictionary" <<endl;
+	      cout<<"3.Search " <<endl;
+	      cout<<"4.Delete" <<endl;
+	      cout<<"5.Exit" <<endl;
+	      cout<<"Enter your choice :-";
+	      cin>>x;
+                switch(x)
+		{
+			case 1:
+				cout<<"Enter word:";
+				cin>>d.word;
+				cout<<"Enter Meaning:";
+				cin>>d.meaning;
+				h.insert(d);
+				break;
+			
+			case 2:
+				h.display();
+				break;
+				
+			case 3:
+				cout<<"\n Enter word to be searched:";
+				cin>>cW;
+				h.search(cW);
+				break;
+				
+			case 4:
+				cout<<"\n Enter the word to be deleted:";
+				cin>>cW;
+				h.delword(cW);
+				break;
+				
+			case 5:
+				exit(1);
+			
+			default:
+                cout<<"Wrong choice"<<endl;
+				
+		}
+	}			
+
+}
