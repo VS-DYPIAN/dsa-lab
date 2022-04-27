@@ -1,116 +1,191 @@
+/*Represent a given graph using adjacency matrix/list to perform DFS and using adjacency
+list to perform BFS. Use the map of the area around the college as the graph. Identify
+the prominent land marks as nodes and perform DFS and BFS on that.*/
+
 #include<iostream>
 using namespace std;
- 
- void BFS(int arr[6][6],int n){
 
-     int vis[n];
-     int queue[2*n];
-     int front = 0,rear=0;
-     for(int i=0;i<n;i++){
-         vis[i] = 0;
-     }
-     queue[rear] = 0;
-     vis[0] = 1;
-     rear++;
 
-     while(front!=rear){
-        //  int size = rear+1;
-        
-         int node = queue[front];
-         front++;
-         cout<<node+1<<" ";
-         for(int i=0;i<n;i++){
-             if(arr[node][i]==1 and vis[i] == 0){
-                 queue[rear] = i;
-                 rear++;
-                 vis[i] = 1;
-             }
-         }
-     }
-     cout<<endl;
- }
-
- void DFS(int graph[6][6],int n){
-
-     int vis[n];
-     int stack[2*n];
-     int top=0;
-     for(int i=0;i<n;i++){
-         vis[i] = 0;
-     }
-
-    stack[top] = 0;
-    
-
-    while(top!=-1){
-        int node = stack[top];
-        top--;
-
-        if(vis[node]==0){
-            cout<<node+1<<" ";
-            vis[node] = 1;
-            for(int i=0;i<n;i++){
-                if(graph[node][i]==1){
-                    top++;
-                    stack[top] = i;
+class Graph
+{
+        public :
+        	int mat[10][10];
+        	string vertex[10];
+        	int n,m,c;
+        	int stack[10];
+        	int E;
+            Graph()
+	        {
+	        	for(int i=0;i<10;i++)
+				{
+					for(int j=0;j<10;j++)
+					{
+						mat[i][j]=0;
+					}
+	        		
+				}
+	        	
+			}      
+        	
+        	
+        	
+        void create()
+        {
+        	cout<<"Enter no of Nodes in Graph :";
+        	cin>>n;
+        	
+        	
+        	
+        	for(int i=0;i<n;i++)
+        	{
+        		cout<<"Enter the name of node "<<i+1<<" :";
+        		cin>>vertex[i];
+			}
+			
+			for(int i=0;i<n;i++)
+			{
+				for(int j=0;j<n;j++)
+                {
+				
+                    if(i==j)
+                    {
+                            mat[i][j]=0;
+                    }
+                                
+                    else if(mat[i][j]==0)
+                    {
+                            cout<<"Is there edge between vertex "<<vertex[i]<<" and vertex "<<vertex[j]<<"(If yes type 1 else 0)";
+                            cin>>mat[i][j];
+                            mat[j][i]=mat[i][j];
+							
+                              
+                    }
+                                
                 }
             }
-        }
+		}
+			
+			
+		
+		void Display_mat()
+	    {
+	                cout<<"\n";
+	                for(int i=0;i<n;i++)
+	                {
+	                        cout<<"\t"<<vertex[i];
+	                }
+	                
+	                
+	                for(int i=0;i<n;i++)
+	                {
+	                        cout<<"\n"<<vertex[i];;
+	                        
+	                        
+	                        
+	                        for(int j=0;j<n;j++)
+	                        {
+	                                
+	                                cout<<"\t"<<mat[i][j];
+	                        }
+	                        
+	                }
+	    }
+	        
+	    void DFS()
+	    {
+	        	  
+			    int vis[n];
+			    int stack[2*n];
+			    int top=0;
+			    for(int i=0;i<n;i++)
+				{
+			        vis[i] = 0;
+			    }
+			
+			    stack[top] = 0;
+			    
+			
+			    while(top!=-1){
+			        int node = stack[top];
+			        top--;
+			
+			        if(vis[node]==0){
+			            cout<<vertex[node]<<" ";
+			            vis[node] = 1;
+			            for(int i=0;i<n;i++){
+			                if(mat[node][i]!=0){
+			                    top++;
+			                    stack[top] = i;
+			                }
+			            }
+			        }
+			
+			    }
+			    cout<<endl;
+	    }
+		
+		void BFS()
+		{
 
-    }
-    cout<<endl;
- }
- 
+		    int vis[n];
+		    int queue[2*n];
+		    int front = 0,rear=0;
+		    for(int i=0;i<n;i++)
+			{
+		        vis[i] = 0;
+		    }
+		    queue[rear] = 0;
+		    vis[0] = 1;
+		    rear++;
+		
+		    while(front!=rear)
+			{
+		        //  int size = rear+1;
+		        
+		        int node = queue[front];
+		        front++;
+		        cout<<vertex[node]<<" ";
+		        for(int i=0;i<n;i++){
+		            if(mat[node][i]==1 and vis[i] == 0)
+					{
+		                queue[rear] = i;
+		                rear++;
+		                vis[i] = 1;
+		            }
+		        }
+		    }
+		    cout<<endl;
+		}                
+};
+
 int main()
 {
-    int graph[6][6] = {
-    //     1 2 3 4 5 6
-    /*1*/ {0,1,0,1,0,0},
-    /*2*/ {1,0,0,0,1,1},
-    /*3*/ {0,0,0,1,1,1},
-    /*4*/ {1,0,1,0,0,0},
-    /*5*/ {0,1,1,0,0,0},
-    /*6*/ {0,1,1,0,0,0}
-    };
-    int ch;
-    do{
-        cout<<"The Graph is :- "<<endl;
-        cout<<"\t";
-	    for(int i=0;i<6;i++){
-	    	cout<<i+1<<"\t";
-	    }
-	    cout<<endl;
-	    for(int i=0;i<6;i++){
-	        cout<<i+1<<"\t";
-		for(int j=0;j<6;j++){
-			cout<<graph[i][j]<<"\t";
-		}
-		cout<<endl;
-        }
-
-        cout<<"Select any one*******"<<endl;
-        cout<<"1. BFS Traversal of graph"<<endl;
-        cout<<"2. DFS Traversal of graph"<<endl;
+        Graph g1;
+        int ch;
         
-        cout<<"enter your choice :- ";
-        cin>>ch;
-        cout<<endl;
-
-        switch (ch)
+        do
         {
-        case 1:
-            cout<<"BFS traversal of graph is :- ";
-            BFS(graph,6);
-            break;
+                cout<<"\nMenu\n1.Create graph\n2.Display Adjacency Matrix\n3.DFS traversal\n4.BSF traversal\n";
+                cout<<"Enter your choice :";
+                cin>>ch;
+                
+                switch(ch)
+                {
+                        case 1:
+                                g1.create();
+                                break;
+                        case 2:
+                                g1.Display_mat();
+                                break;
+                        case 3:
+                        		g1.DFS();
+                                break;
+                        case 4:
+                        	    g1.BFS();
+                        	    break;
+                }      
+        }while(ch!=5);
         
-        case 2:
-            cout<<"The DFS traversal of the graph is :- ";
-            DFS(graph,6);
-            break;
-        }
-    }while(ch==1 or ch==2);
-
-    cout<<"--- Thank You ---"<<endl;
- 
     return 0;
+        
 }
