@@ -25,7 +25,7 @@ class BST             //declaration of class as BST
    void search(node *, int);
    void find(int, node **, node **);
    void insert(node *, node *);
-    
+   int  LongestPath(node *root);
    void preorder(node *);
    void inorder(node *);
    void postorder(node *);
@@ -42,9 +42,6 @@ void BST::find(int i, node **par, node **loc)//find the position of the item
    node *ptr, *ptrsave;
    if (r == NULL)
    {
-      *loc = NULL;     //*loc=location ptr
-      *par = NULL;    //*par=parent node ptr; 
-      return;
    }
    if (i == r->key)
    {
@@ -216,9 +213,22 @@ void BST::show(node *ptr, int level)//print the tree
       show(ptr->l, level+1);
    }
 }
+
+int BST::LongestPath(node *root)
+{
+    if(root == NULL)
+       return 0;
+    int Lctr = LongestPath(root->l);
+    int Rctr = LongestPath(root->r);
+    if (Lctr>Rctr)
+       return (Lctr +1);
+    else return (Rctr +1);
+    
+}
+
 int main()
 {
-   int c, n,item;
+   int c, n,item,Long;
    BST bst;
    node *t;
    while (1)
@@ -233,7 +243,8 @@ int main()
       cout<<"5.Postorder Traversal"<<endl;
       cout<<"6.Display the tree"<<endl;
       cout<<"7.Minimum value in BST "<<endl;
-      cout<<"8.Quit"<<endl;
+      cout<<"8.Longest path"<<endl;
+      cout<<"9.Quit"<<endl;
       cout<<"Enter your choice : ";
       cin>>c;
       switch(c)
@@ -271,11 +282,16 @@ int main()
             cout<<endl;
             break;
          case 7:
-           // cout<<"Minimum value in BST is : "<<t->key<<endl;
+           
             bst.minimum(r);
             cout<<endl;
             break;
          case 8:
+            Long = bst.LongestPath(r);
+            cout<<"Longest path in BST is :- "<<Long<<endl;
+            cout<<endl;
+            break;
+         case 9:
             exit(1);
          default:
             cout<<"Wrong choice"<<endl;
