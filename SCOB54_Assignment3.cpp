@@ -5,10 +5,7 @@ tree by inserting the values in the order given. after constructing a binary tre
 i. insert new node ii. find number of nodes in longest path iii. minimum data value found 
 in the tree iv. change a tree so that the roles of the left and right pointers are swapped 
 at every node v. search a value
-*********************************************************************************
-BINARY SEARCH TREE:- The right sub-tree of a node has a key greater than to its parent node's key.
-The left sub-tree of a node has a key lesser than to its parent node's key.*
-**********************************************************************************/
+*/
 # include <iostream>         // provides basic input and output services for C++ programs
 # include <cstdlib>          // declares a set of general-purpose functions
 using namespace std;
@@ -23,76 +20,24 @@ class BST             //declaration of class as BST
 {
    public://functions declaration
    void search(node *, int);
-   void find(int, node **, node **);
+   
    void insert(node *, node *);
-   int  LongestPath(node *root);
+   
    void preorder(node *);
    void inorder(node *);
    void postorder(node *);
-   void show(node *, int);
+   void display(node *, int);
    void minimum(struct node* node);
+   int  LongestPath(node *root);
+   node* Swapnodes(node *root);
    BST()
    {
       r = NULL;
    }
 };
 
-void BST::find(int i, node **par, node **loc)//find the position of the item 
-{
-   node *ptr, *ptrsave;
-   if (r == NULL)
-   {
-   }
-   if (i == r->key)
-   {
-      *loc = r;
-      *par = NULL;
-      return;
-   }
-   if (i < r->key)
-   ptr = r->l;      // present in left subtree
-   else
-   ptr = r->r;      // present in right subtree
-   ptrsave = r;
-   while (ptr != NULL)
-   {
-      if (i == ptr->key)
-      {
-         *loc = ptr;
-         *par = ptrsave;
-         return;
-      }
-      ptrsave = ptr;
-      if (i < ptr->key)
-      ptr = ptr->l;
-      else
-      ptr = ptr->r;
-   }
-   *loc = NULL;
-   *par = ptrsave;
-}
 
-void BST::search(node *root, int data) //To search an item in BST.
-{
-   int depth = 0;
-   
-   while(root != NULL)
-   {
-      depth++;
-      if(root->key == data)
-      {
-         cout<<"\nData found at depth: "<<depth<<endl;
-         return;
-      }
-      else if(root->key > data)
-      root = root->l;
-      else
-      root = root->r;
-   }
-   cout<<"\n Data not found"<<endl;
-   return;
-}
-void BST::insert(node *root, node *newnode)  //To insert items in the tree
+void BST::insert(node *tree, node *newnode)  //To insert items in the tree
 {
    if (r == NULL)
    {
@@ -100,107 +45,52 @@ void BST::insert(node *root, node *newnode)  //To insert items in the tree
       r->key = newnode->key;
       r->l= NULL;
       r->r= NULL;
-      cout<<"Root node is Added"<<endl;
+      cout<<"Root node is Added"<<endl;    //this will execute only once 
       return;
    }
-   if (root->key == newnode->key)
+   if (tree->key == newnode->key)
    {
       cout<<"Element already in the tree"<<endl;
       return;
    }
-   if (root->key > newnode->key)
+   if (tree->key > newnode->key)
    {
-      if (root->l != NULL)
+      if (tree->l != NULL)
       {
-         insert(root->l, newnode);
+         insert(tree->l, newnode);
       }
       else
       {
-         root->l= newnode;
-         (root->l)->l = NULL;
-         (root->l)->r= NULL;
+         tree->l= newnode;
+         (tree->l)->l = NULL;
+         (tree->l)->r= NULL;
          cout<<"node Added To Left"<<endl;
          return;
       }
    }
    else
    {
-      if (root->r != NULL)
+      if (tree->r != NULL)
       {
-         insert(root->r, newnode);
+         insert(tree->r, newnode);
       }
       else
       {
-         root->r = newnode;
-         (root->r)->l= NULL;
-         (root->r)->r = NULL;
+         tree->r = newnode;
+         (tree->r)->l= NULL;
+         (tree->r)->r = NULL;
          cout<<"node Added To Right"<<endl;
          return;
       }
    }
 }
 
-void BST::minimum(struct node*node)   
-{
-struct node* current = node;
- 
-/* loop down to find the leftmost leaf */
-while (current->l != NULL)
-{
-    current = current->l;
-    cout<<"Minimum value in BST is : "<<current->key<<endl;
-}
-return ;
-}
-
-void BST::preorder(node *ptr)     //to traverse the node as preorder as: root ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ Left ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ right.
-{
-   if (r == NULL)
-   {
-      cout<<"Tree is empty"<<endl;
-      return;
-   }
-   if (ptr != NULL)
-   {
-      cout<<ptr->key<<" ";
-      preorder(ptr->l);
-      preorder(ptr->r);
-   }
-}
-void BST::inorder(node *ptr)   // to traverse the node as inorder as:left ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ root ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ right.
-{
-   if (r == NULL)
-   {
-      cout<<"Tree is empty"<<endl;
-      return;
-   }
-   if (ptr != NULL)
-   {
-      inorder(ptr->l);
-      cout<<ptr->key<<" ";
-      inorder(ptr->r);
-   }
-}
-void BST::postorder(node *ptr)   //to traverse the node as preorder as:left ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ right ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ root
-{
-   if (r == NULL)
-   {
-      cout<<"Tree is empty"<<endl;
-      return;
-   }
-   if (ptr != NULL)
-   {
-      postorder(ptr->l);
-      postorder(ptr->r);
-      cout<<ptr->key<<" ";
-   }
-}
-void BST::show(node *ptr, int level)//print the tree
+void BST::display(node *ptr, int level)//print the tree
 {
    int i;
    if (ptr != NULL)
    {
-      show(ptr->r, level+1);
+      display(ptr->r, level+1);
       cout<<endl;
       if (ptr == r)
          cout<<"Root->: ";
@@ -210,7 +100,7 @@ void BST::show(node *ptr, int level)//print the tree
          cout<<" ";
       }
       cout<<ptr->key;
-      show(ptr->l, level+1);
+      display(ptr->l, level+1);
    }
 }
 
@@ -226,9 +116,107 @@ int BST::LongestPath(node *root)
     
 }
 
+void BST::search(node *root, int data) //To search an item in BST.
+{
+   int depth = 0;
+   node *temp = new node;
+   temp = root;
+   while(temp != NULL)
+   {
+      depth++;
+      if(temp->key == data)
+      {
+         cout<<"\nData found at depth: "<<depth<<endl;
+         return;
+      }
+      else if(temp->key > data)
+      temp = temp->l;
+      else
+      temp = temp->r;
+   }
+   cout<<"\n Data not found"<<endl;
+   return;
+}
+
+
+void BST::minimum(struct node*node)   
+{
+struct node* current = node;
+ 
+/* loop down to find the leftmost leaf */
+while (current->l != NULL)
+{
+    current = current->l;
+    cout<<"Minimum value in BST is : "<<current->key<<endl;
+}
+return ;
+}
+
+
+void BST::preorder(node *ptr)     //to traverse the node as preorder as: root-l-f
+{
+   if (r == NULL)
+   {
+      cout<<"Tree is empty"<<endl;
+      return;
+   }
+   if (ptr != NULL)
+   {
+      cout<<ptr->key<<" ";
+      preorder(ptr->l);
+      preorder(ptr->r);
+   }
+}
+void BST::inorder(node *ptr)   // to traverse the node as inorder as:l-root-r
+  {
+   
+   if (r == NULL)
+   {
+      cout<<"Tree is empty"<<endl;
+      return;
+   }
+   if (ptr != NULL)
+   {
+      inorder(ptr->l);
+      cout<<ptr->key<<" ";
+      inorder(ptr->r);
+   }
+}
+void BST::postorder(node *ptr)   //to traverse the node as preorder as:l-r-root
+{
+   if (r == NULL)
+   {
+      cout<<"Tree is empty"<<endl;
+      return;
+   }
+   if (ptr != NULL)
+   {
+      postorder(ptr->l);
+      postorder(ptr->r);
+      cout<<ptr->key<<" ";
+   }
+}
+
+
+node* Swapnodes(node *root)
+{
+    node* temp;
+    if (root == NULL)
+       return 0;
+       
+    temp = root->l;
+        root->l = root->r;
+        root->r = temp;
+
+        Swapnodes(root->l);
+        Swapnodes(root->r);
+    return 0;
+    
+}
+
 int main()
 {
-   int c, n,item,Long;
+   int c, n,item ,Long;
    BST bst;
    node *t;
    while (1)
@@ -244,7 +232,8 @@ int main()
       cout<<"6.Display the tree"<<endl;
       cout<<"7.Minimum value in BST "<<endl;
       cout<<"8.Longest path"<<endl;
-      cout<<"9.Quit"<<endl;
+      cout<<"9.Swap"<<endl;
+      cout<<"10.Quit"<<endl;
       cout<<"Enter your choice : ";
       cin>>c;
       switch(c)
@@ -261,37 +250,51 @@ int main()
             cin>>item;
             bst.search(r,item);
             break;
+         
          case 3:
             cout<<"Inorder Traversal of BST:"<<endl;
             bst.inorder(r);
             cout<<endl;
             break;
+         
          case 4:
             cout<<"Preorder Traversal of BST:"<<endl;
             bst.preorder(r);
             cout<<endl;
             break;
+         
          case 5:
             cout<<"Postorder Traversal of BST:"<<endl;
             bst.postorder(r);
             cout<<endl;
             break;
+         
          case 6:
             cout<<"Display BST:"<<endl;
-            bst.show(r,1);
+            bst.display(r,1);
             cout<<endl;
             break;
+         
          case 7:
-           
             bst.minimum(r);
             cout<<endl;
             break;
+         
          case 8:
             Long = bst.LongestPath(r);
             cout<<"Longest path in BST is :- "<<Long<<endl;
             cout<<endl;
             break;
+         
          case 9:
+            cout << "Befors swap order in BST is :-",bst.inorder(r),"\n";
+            Swapnodes(r);
+            cout<<"After swap order in Bst is :-",bst.inorder(r),"\n";
+            Swapnodes(r);
+			cout<<endl;
+            break;
+         
+         case 10:
             exit(1);
          default:
             cout<<"Wrong choice"<<endl;
