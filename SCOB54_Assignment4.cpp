@@ -10,14 +10,14 @@ require for finding any keyword. Use Binary Search Tree for implementation.
 #include<string.h>
 using namespace std;
 
-typedef struct node  // to defne struct with same name 
+struct node  // to defne struct with same name 
 {
 
  char word[20];         
  char meaning[20];
- class node  *left;
- class node * right;
-}node;
+ struct node  *left;
+ struct node * right;
+}*r;
 
 class dict      // declaration of class dictionary 
 {
@@ -45,7 +45,7 @@ public:        // function declaration
 
 void dict :: create()             // 1.Create function
 {
- class node *temp;
+ struct node *temp;
  int ch;
 
  do
