@@ -3,44 +3,47 @@
 Implement the Heap/Shell sort algorithm implemented in Java demonstrating heap/shell 
 data structure with modularity of programming language
 */
+
 import java.util.*;
-
-class dsa9 {
-
-      static void heapify(int arr[], int n, int ind) {
-
-            int largest = ind;
-            int n1 = 2 * ind + 1;
-            int n2 = 2 * ind + 2;
-            if (n1 < n && arr[largest] < arr[n1])
-            {
-                  largest = n1;
-            }
-            if (n2 < n && arr[largest] < arr[n2])
-            {
-                  largest = n2;
-            }
-            if (ind != largest) {
-                  int temp = arr[ind];
-                  arr[ind] = arr[largest];
-                  arr[largest] = temp;
-                  heapify(arr, n, largest);
-            }
-      }
-      public static void main(String[] args) {
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Enter size of the array :- ");
-            int n = sc.nextInt();
-            System.out.println(" ");
-            int[] arr = new int[n];
-            
-            System.out.println("Enter Elements of array : ");
-
-            for (int i = 0; i < n; i++)
-            {
-                  arr[i] = sc.nextInt();
-            }
-            sc.close();
+class Main
+{
+    static void heapify(int arr[],int n,int ind)
+    {
+        int largest = ind;
+        int n1 = 2* ind +1;
+        int n2 = 2* ind +2;
+        
+        if(n1 < n && arr[largest] < arr[n1])
+        {
+            largest = n1;
+        }
+        
+        if(n2 < n && arr[largest] < arr[n2])
+        {
+            largest = n2;
+        }
+        
+        if(ind != largest) //swap
+        {
+            int temp = arr[ind];
+            arr[ind] = arr[largest];
+            arr[largest] = temp;
+            heapify(arr,n,largest);
+        }
+    }
+    public static void main(String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter size of the array : ");
+        int n = sc.nextInt();
+        System.out.println(" ");
+        int[] arr = new int[n];
+        System.out.print("Enter elements of the array : ");
+        for(int i=0;i<n; i++)
+        {
+            arr[i] = sc.nextInt();
+        }
+        sc.close();
             // Now we will perform heapsort through heapify function;
             for (int i = (n / 2) - 1; i >= 0; i--)
             {
@@ -66,5 +69,5 @@ class dsa9 {
                   System.out.print(arr[j] + "  ");
             }
             System.out.println("");
-      }
+    }
 }
