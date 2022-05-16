@@ -5,7 +5,6 @@
 	techniques and compare them using number of comparisons required to find a set of
 	telephone numbers.
 	
-	SCOB33 Yash Ambekar
 */
 
 #include<iostream>
