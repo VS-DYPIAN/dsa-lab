@@ -33,7 +33,7 @@ class Main
     }
     public static void main(String[] args)
     {
-        Scanner sc = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);  // for input
         System.out.print("Enter size of the array : ");
         int n = sc.nextInt();
         System.out.println(" ");
