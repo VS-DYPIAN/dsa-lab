@@ -68,7 +68,7 @@ void Telephone:: quadra()
 	   while(1)
 	    {
 		int k = 0;
-		int V = (address + k*k)%10;
+		int V = (key + k*k)%10;
 		
 		
 			if(mobile[V]==(-1))
