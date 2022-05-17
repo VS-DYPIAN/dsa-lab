@@ -15,13 +15,13 @@ class Telephone
 			mobile[i]=(-1);
 		}
 	}
-	void insert_linearprob();
-	void insert_Quadraticprob();
+	void linear();
+	void quadra();
 	void display();
 	int Search(long k);
 };
 
-void Telephone:: insert_linearprob()
+void Telephone:: linear()
 {
 		cout<<"Enter the mobile no : ";
 		cin>>key;
@@ -52,7 +52,7 @@ void Telephone:: insert_linearprob()
 		}
 }
 
-void Telephone:: insert_Quadraticprob()
+void Telephone:: quadra()
 {
 	cout<<"Enter the mobile no : ";
 	cin>>key;
@@ -154,7 +154,7 @@ int main(){
 	        cin>>n;
 	        for(int i=0;i<n;i++)
 	        {
-	        t.insert_linearprob();	
+	        t.linear();	
 	        }
 	    
 	        break;
@@ -164,7 +164,7 @@ int main(){
 	        cin>>n;
 	        for(int i=0;i<n;i++)
 	        {
-	        t.insert_Quadraticprob();
+	        t.quadra();
 	        }
 	        break;
 	      
